@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 pdfplumber = "*"
+pytest = "*"
 
 [dev-packages]
 
