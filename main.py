@@ -30,7 +30,7 @@ def parse_transactions(text):
     # "XXXX Recurring Debit Card",
     # International POS Fee 
 
-    # Example Line to match: 01/17 30.00 5661 Debit Card Purchase Paypal *Add To Bal
+    # Example Line to match: 01/17 30.00 XXXX Debit Card Purchase Paypal *Add To Bal
     transaction_pattern = re.compile(r"(\d{2}/\d{2})\s+([\d,]+\.\d{2})\s+(.+)")
 
     for line in lines:
