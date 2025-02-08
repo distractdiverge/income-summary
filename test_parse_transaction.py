@@ -6,6 +6,8 @@ from main import parse_transaction
     [
         ("01/17 30.00 XXXX Debit Card Purchase Paypal *Add To Bal", 
             ("01/17", "30.00", "XXXX Debit Card Purchase Paypal *Add To Bal")),
+        ("08/29 .99 XXXX Debit Card Purchase Pp*Apple.Com/Bill", 
+            ("08/29", ".99", "XXXX Debit Card Purchase Pp*Apple.Com/Bill")),
         ("test2", None),
     ],
 )
@@ -15,6 +17,7 @@ def test_parse_transaction(input, expected):
     if expected is None:
         assert actual is None
     else:
+        assert actual is not None
         date, amount, description = actual
         
         expected_date, expected_amount, expected_description = expected

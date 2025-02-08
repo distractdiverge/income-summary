@@ -30,11 +30,13 @@ def parse_transaction(text):
     # International POS Fee 
 
     # Example Line to match: 01/17 30.00 XXXX Debit Card Purchase Paypal *Add To Bal
-    transaction_pattern = re.compile(r"(\d{2}/\d{2})\s+([\d,]+\.\d{2})\s+(.+)")
+    date_regex = r"(?P<date>\d{2}/\d{2})"
+    amount_regex = r"(?P<amount>[\d,]{0,}\.\d{2})"
+    desc_regex = r"(?P<description>.+)"
+    transaction_pattern = re.compile(fr"{date_regex}\s+{amount_regex}\s+{desc_regex}")
     match = transaction_pattern.search(text.strip())
 
     if match:
-        date_str, amount, description = match.groups()
         date_str, amount, description = match.groups()
             
         # date_obj = datetime.datetime.strptime(f"{date_str}/{cuurent_year}")
@@ -43,6 +45,8 @@ def parse_transaction(text):
         # amount_value = float(amount.replace(",",""))
 
         return (date_str, amount, description)
+    else:
+        print(f"Could not match: '{text}'")
     
     return None
 
@@ -51,7 +55,6 @@ def parse_transaction(text):
 def parse_transactions(text):
     transactions = []
     lines = text.split("\n")
-    print(len(lines), " Lines")
 
     for line in lines:
         transaction = parse_transaction(line)
@@ -86,7 +89,6 @@ def process_statements(directory):
             transactions = process_statement(os.path.join(directory, file))
             all_transactions.extend(transactions)
     
-    print(f"{repr(all_transactions)}")
     income_summary = aggregate_income_by_month(all_transactions)
     save_summary(income_summary)
 
