@@ -12,12 +12,25 @@ def extract_transactions_from_pdf(file_path):
             text = page.extract_text()
             if text:
                 parsed_text = parse_transactions(text)
-                print(json.dumps(parsed_text))
                 transactions.extend(parsed_text)
 
     return transactions
 
-def parse_transaction(text):
+def parse_statement_date(text):
+    from_regex = r"(?P<from>\d{2}/\d{2}/\d{4})"
+    to_regex = r"(?P<to>\d{2}/\d{2}/\d{4})"
+    date_regex = re.compile(fr"For the period\s+{from_regex}\s+to\s+{to_regex}.*")
+
+    match = date_regex.search(text)
+    if match:
+        from_date_str, to_date_str = match.groups()
+        from_date = datetime.datetime.strptime(from_date_str, "%m/%d/%Y")
+        to_date = datetime.datetime.strptime(to_date_str, "%m/%d/%Y")
+        return (from_date, to_date)
+    else:
+        return None
+
+def parse_transaction(text, statement_from_date = None, statement_to_date = None):
     ###
     ### Parse a SINGLE transaction and return its parts
     ###
@@ -38,7 +51,7 @@ def parse_transaction(text):
 
     if match:
         date_str, amount, description = match.groups()
-            
+        ## TODO: if from/to dates are not None, use them to add the year to the date_obj for this txn
         # date_obj = datetime.datetime.strptime(f"{date_str}/{cuurent_year}")
         # date_obj = datetime.datetime.now()
 
@@ -50,18 +63,26 @@ def parse_transaction(text):
     
     return None
 
-
-
 def parse_transactions(text):
     transactions = []
     lines = text.split("\n")
 
+    # TODO: Parse out the line that indicates the Date Range (to get the Year)
+    # line example: 'For the period 03/06/2024 to 04/03/2024 Number of enclosures: 0'
+
+    statement_from_date = None
+    statement_to_date = None
+
     for line in lines:
-        transaction = parse_transaction(line)
+        
+        transaction = parse_transaction(line, statement_from_date, statement_to_date)
         
         if transaction is not None:
             (date_str, amount_value, description) = transaction
             transactions.append((date_str, description, amount_value))
+        elif "for the period" in line.lower():
+            dates = parse_statement_date(line)
+            statement_from_date, statement_to_date = dates
             
     return transactions
 
