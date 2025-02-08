@@ -49,15 +49,27 @@ def parse_transaction(text, statement_from_date = None, statement_to_date = None
     transaction_pattern = re.compile(fr"{date_regex}\s+{amount_regex}\s+{desc_regex}")
     match = transaction_pattern.search(text.strip())
 
+    txn_year = None
+    ## TODO: if from/to dates are not None, use them to add the year to the date_obj for this txn
+    if statement_from_date is not None and statement_to_date is not None:
+        if statement_from_date.year == statement_to_date.year:
+            txn_year = statement_from_date.year
+        else:
+            print(f"Statement From({statement_from_date.year})/To({statement_to_date.year}) dates have diff years")
+            # This case should ONLY occur for a January statement, so we can assume Jan (to-year) & Feb (from-year)
+
     if match:
         date_str, amount, description = match.groups()
-        ## TODO: if from/to dates are not None, use them to add the year to the date_obj for this txn
-        # date_obj = datetime.datetime.strptime(f"{date_str}/{cuurent_year}")
-        # date_obj = datetime.datetime.now()
+        date_obj = datetime.datetime.now()
+        
+        if date_str.startswith("01"): # TODO: Needs more testing
+            date_obj = datetime.datetime.strptime(f"{date_str}/{statement_to_date.year}", "%m/%d/%Y")
+        else:
+            date_obj = datetime.datetime.strptime(f"{date_str}/{statement_from_date.year}", "%m/%d/%Y")
 
-        # amount_value = float(amount.replace(",",""))
+        amount_value = float(amount.replace(",",""))
 
-        return (date_str, amount, description)
+        return (date_obj, amount_value, description)
     else:
         print(f"Could not match: '{text}'")
     
