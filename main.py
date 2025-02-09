@@ -99,11 +99,11 @@ def parse_transactions(text):
     return transactions
 
 def aggregate_income_by_month(transactions):
-    pass
+    return transactions
 
 def save_summary(income_summary, file_path="income_summary.json"):
     with open(file_path, "w") as json_file:
-        json.dump(income_summary, json_file, indent=4)
+        json.dump(income_summary, json_file, default=str, indent=4)
     
     print("Income Summary saved as " + file_path)
 
