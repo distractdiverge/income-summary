@@ -9,6 +9,7 @@ from main import parse_transaction
         ("08/29 .99 XXXX Debit Card Purchase Pp*Apple.Com/Bill", 
             ("08/29", ".99", "XXXX Debit Card Purchase Pp*Apple.Com/Bill")),
         ("test2", None),
+        ("01/12 6,815.43 01/20 8,016.72 01/27 9,668.98 02/03 7,498.76", None)
     ],
 )
 def test_parse_transaction(input, expected):
