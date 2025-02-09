@@ -30,6 +30,20 @@ def parse_statement_date(text):
     else:
         return None
 
+###
+### Should this transaction be processed furter?
+### There are certain transactions that match the general txn regex, 
+### but really, they're aggregated data, so this fn contains some patterns to exclude
+### and then returns true/false
+###
+def should_process_transaction(text):
+    date_value_pattern = re.compile(r"(\d{2}/\d{2}\s+[\d,]+\.\d{2}\s+){2,}")
+
+    if date_value_pattern.search(text):
+        return False
+    
+    return True # Yes, process by default
+
 def parse_transaction(text, statement_from_date = None, statement_to_date = None):
     ###
     ### Parse a SINGLE transaction and return its parts
@@ -58,7 +72,10 @@ def parse_transaction(text, statement_from_date = None, statement_to_date = None
             print(f"Statement From({statement_from_date.year})/To({statement_to_date.year}) dates have diff years")
             # This case should ONLY occur for a January statement, so we can assume Jan (to-year) & Feb (from-year)
 
-    if match:
+    
+    should_process = should_process_transaction(text)
+
+    if match and should_process:
         date_str, amount, description = match.groups()
         date_obj = datetime.datetime.now()
         
