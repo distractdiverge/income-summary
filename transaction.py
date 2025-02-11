@@ -1,17 +1,6 @@
 from datetime import datetime
 from typing import NamedTuple
-
-
-class TxnCategory(NamedTuple):
-    name: str
-    type: str
-
-CATEGORIES = frozenset({
-    TxnCategory("Other", "other"), # Default
-    TxnCategory("Debit", "debit"),
-    TxnCategory("Purchase", "purchase"),
-    TxnCategory("Withdrawl", "withdrawl")
-})
+from transaction_category import TxnCategory
 
 class Transaction(NamedTuple):
     date: datetime

@@ -5,7 +5,8 @@ from datetime import datetime
 import json
 from typing import List, Tuple
 from collections import defaultdict
-from transaction import Transaction, TxnCategory, CATEGORIES
+from transaction_category import TxnCategory, CATEGORIES
+from transaction import Transaction
 
 def extract_transactions_from_pdf(file_path) -> List[Transaction]:
     transactions = []
