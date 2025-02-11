@@ -31,3 +31,7 @@ def test_parse_transaction(input, expected):
         assert date == expected_date
         assert amount == expected_amount
         assert description == expected_description
+
+
+def test_categorize_transaction(transaction):
+    pass
