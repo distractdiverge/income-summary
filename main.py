@@ -1,12 +1,13 @@
 import os
 import pdfplumber
 import re
-import datetime
+from datetime import datetime
 import json
+from typing import List, Tuple
 from collections import defaultdict
 from transaction import Transaction, TxnCategory, CATEGORIES
 
-def extract_transactions_from_pdf(file_path):
+def extract_transactions_from_pdf(file_path) -> List[Transaction]:
     transactions = []
     with pdfplumber.open(file_path) as pdf:
         for page in pdf.pages:
@@ -17,7 +18,7 @@ def extract_transactions_from_pdf(file_path):
 
     return transactions
 
-def parse_statement_date(text):
+def parse_statement_date(text) -> Tuple[datetime, datetime] | None:
     from_regex = r"(?P<from>\d{2}/\d{2}/\d{4})"
     to_regex = r"(?P<to>\d{2}/\d{2}/\d{4})"
     date_regex = re.compile(fr"For the period\s+{from_regex}\s+to\s+{to_regex}.*")
@@ -25,8 +26,8 @@ def parse_statement_date(text):
     match = date_regex.search(text)
     if match:
         from_date_str, to_date_str = match.groups()
-        from_date = datetime.datetime.strptime(from_date_str, "%m/%d/%Y")
-        to_date = datetime.datetime.strptime(to_date_str, "%m/%d/%Y")
+        from_date = datetime.strptime(from_date_str, "%m/%d/%Y")
+        to_date = datetime.strptime(to_date_str, "%m/%d/%Y")
         return (from_date, to_date)
     else:
         return None
@@ -37,7 +38,7 @@ def parse_statement_date(text):
 ### but really, they're aggregated data, so this fn contains some patterns to exclude
 ### and then returns true/false
 ###
-def should_process_transaction(text):
+def should_process_transaction(text) -> bool:
     date_value_pattern = re.compile(r"(\d{2}/\d{2}\s+[\d,]+\.\d{2}\s+){2,}")
 
     if date_value_pattern.search(text):
@@ -45,7 +46,7 @@ def should_process_transaction(text):
     
     return True # Yes, process by default
 
-def categorize_transaction(text_description):
+def categorize_transaction(text_description) -> TxnCategory:
     #"Direct Deposit - ACH Trnsfr Mspbna",
     #    "Interest Payment",
     #"Other Fin Inst ATM Surcharge Reimb",
@@ -54,9 +55,9 @@ def categorize_transaction(text_description):
     #    "5661 Recurring Debit Card Paypal *Hulu",
     #    "ATM Withdrawal 435 York Rd. Warminister",
     #    "5661 Debit Card Purchase Pp*Apple.Com/Bill",
-    return "Other"
+    return TxnCategory("Other", "other")
 
-def parse_transaction(text, statement_from_date = None, statement_to_date = None):
+def parse_transaction(text, statement_from_date = None, statement_to_date = None) -> Transaction | None:
     ###
     ### Parse a SINGLE transaction and return its parts
     ###
@@ -89,24 +90,24 @@ def parse_transaction(text, statement_from_date = None, statement_to_date = None
 
     if match and should_process:
         date_str, amount, description = match.groups()
-        date_obj = datetime.datetime.now()
+        date_obj = datetime.now()
         
         if date_str.startswith("01"): # TODO: Needs more testing
-            date_obj = datetime.datetime.strptime(f"{date_str}/{statement_to_date.year}", "%m/%d/%Y")
+            date_obj = datetime.strptime(f"{date_str}/{statement_to_date.year}", "%m/%d/%Y")
         else:
-            date_obj = datetime.datetime.strptime(f"{date_str}/{statement_from_date.year}", "%m/%d/%Y")
+            date_obj = datetime.strptime(f"{date_str}/{statement_from_date.year}", "%m/%d/%Y")
 
         amount_value = float(amount.replace(",",""))
 
         category = categorize_transaction(description)
         
-        return (date_obj, amount_value, description)
+        return Transaction(date=date_obj, amount=amount_value, description=description, category=category)
     else:
         print(f"Could not match: '{text}'")
     
     return None
 
-def parse_transactions(text):
+def parse_transactions(text) -> List[Transaction]:
     transactions = []
     lines = text.split("\n")
 
@@ -121,11 +122,11 @@ def parse_transactions(text):
         transaction = parse_transaction(line, statement_from_date, statement_to_date)
         
         if transaction is not None:
-            (date_str, amount_value, description) = transaction
-            transactions.append((date_str, description, amount_value))
+            transactions.append(transaction)
         elif "for the period" in line.lower():
             dates = parse_statement_date(line)
-            statement_from_date, statement_to_date = dates
+            if dates is not None:
+                statement_from_date, statement_to_date = dates
             
     return transactions
 
