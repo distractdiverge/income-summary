@@ -15,5 +15,12 @@ from main import categorize_transaction
         ]
 )
 def test_categorize_transaction(txn_description, category):
+    print(f"Description: {repr(txn_description)}")
+    print(f"Category: {repr(category)}")
 
-    pass
+    output = categorize_transaction(txn_description)
+    assert output is not None
+    assert category is not None
+
+    assert output in CATEGORIES
+    assert output.type == category.type

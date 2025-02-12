@@ -56,7 +56,22 @@ def categorize_transaction(text_description) -> TxnCategory:
     #    "5661 Recurring Debit Card Paypal *Hulu",
     #    "ATM Withdrawal 435 York Rd. Warminister",
     #    "5661 Debit Card Purchase Pp*Apple.Com/Bill",
-    return TxnCategory("Other", "other")
+    if text_description is None:
+        return TxnCategory.OtherCategory
+    
+    KEYWORDS_TO_CATEGORIES = {
+        "debit": TxnCategory.DebitCategory,
+        "recurring debit": TxnCategory.DebitCategory,
+        "pos purchase": TxnCategory.PurchaseCategory,
+        "interest": TxnCategory.InterestPaymentCategory,
+        "direct deposit": TxnCategory.DirectDepositCategory
+    }
+
+    description_lower = text_description.lower()
+    return next(
+        (cat for key, cat in KEYWORDS_TO_CATEGORIES.items() if key in description_lower),
+        TxnCategory.OtherCategory
+    )
 
 def parse_transaction(text, statement_from_date = None, statement_to_date = None) -> Transaction | None:
     ###
