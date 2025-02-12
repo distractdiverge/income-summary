@@ -1,6 +1,13 @@
 from enum import Enum
 
 class TxnCategory(Enum):
+    OtherCategory = ("Other", "other")
+    DebitCategory = ("Debit", "debit")
+    DirectDepositCategory = ("Direct Deposit", "direct_deposit")
+    InterestPaymentCategory = ("Interest Payment", "interest_payment")
+    PurchaseCategory = ("Purchase", "purchase")
+    WithdrawlCategory = ("Withdrawl", "withdrawl")
+
     name: str
     type: str
 
@@ -9,9 +16,13 @@ class TxnCategory(Enum):
         self.name = name
         self.type = type
 
+
+
+
 CATEGORIES = frozenset({
-    TxnCategory("Other", "other"), # Default
-    TxnCategory("Debit", "debit"),
-    TxnCategory("Purchase", "purchase"),
-    TxnCategory("Withdrawl", "withdrawl")
+    TxnCategory.OtherCategory, # Default
+    TxnCategory.DebitCategory,
+    TxnCategory.DirectDepositCategory,
+    TxnCategory.PurchaseCategory,
+    TxnCategory.WithdrawlCategory
 })
