@@ -64,7 +64,10 @@ def categorize_transaction(text_description) -> TxnCategory:
         "recurring debit": TxnCategory.DebitCategory,
         "pos purchase": TxnCategory.PurchaseCategory,
         "interest": TxnCategory.InterestPaymentCategory,
-        "direct deposit": TxnCategory.DirectDepositCategory
+        "direct deposit": TxnCategory.DirectDepositCategory,
+        "withdrawal": TxnCategory.WithdrawlCategory,
+        "direct payment": TxnCategory.PurchaseCategory,
+        "web pmt": TxnCategory.PurchaseCategory
     }
 
     description_lower = text_description.lower()

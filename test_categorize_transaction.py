@@ -6,12 +6,16 @@ from main import categorize_transaction
 @pytest.mark.parametrize(
         ("txn_description", "category"),
         [
-            ("Direct Deposit - ACH Trnsfr Mspbna", TxnCategory.DirectDepositCategory),
             ("Interest Payment", TxnCategory.InterestPaymentCategory),
             ("Other Fin Inst ATM Surcharge Reimb", TxnCategory.OtherCategory),
             ("5661 Debit Card Purchase Pp*Apple.Com/Bill", TxnCategory.DebitCategory),
             ("POS Purchase Mirage Tobacco Horsham PA", TxnCategory.PurchaseCategory),
-            ("5661 Recurring Debit Card Paypal *Hulu", TxnCategory.DebitCategory)
+            ("5661 Recurring Debit Card Paypal *Hulu", TxnCategory.DebitCategory),
+            ("Direct Deposit - ACH Trnsfr Mspbna", TxnCategory.DirectDepositCategory),
+            ("Direct Deposit - Direct Dep", TxnCategory.DirectDepositCategory),
+            ("ATM Withdrawal 1305 Main St Warrington PA", TxnCategory.WithdrawlCategory),
+            ("Web Pmt- Inst Xfer Paypal Paramntplus", TxnCategory.PurchaseCategory),
+            ("Direct Payment - Tesla Fina", TxnCategory.PurchaseCategory)
         ]
 )
 def test_categorize_transaction(txn_description, category):
