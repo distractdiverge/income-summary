@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from transaction_category import TxnCategory
 
 class Transaction(NamedTuple):
     date: datetime
     amount: float
-    category: TxnCategory
     description: str
+    category: Optional[TxnCategory] = None
