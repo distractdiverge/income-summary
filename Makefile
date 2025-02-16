@@ -3,13 +3,16 @@ PYTHON = python3
 SRC_DIR = .
 PY_FILES = $(shell find $(SRC_DIR) -name "*.py")
 
-.PHONY: mypy pylint check clean help
+.PHONY: mypy pylint check clean test help
 
 mypy:
 	mypy $(SRC_DIR)
 
 pylint:
 	pylint $(SRC_DIR)
+
+test:
+	pytest
 
 check: mypy pylint
 
@@ -22,5 +25,6 @@ help:
 	@echo "  make install   - Install dependencies (mypy, pylint)"
 	@echo "  make mypy      - Run mypy type checker"
 	@echo "  make pylint    - Run pylint linter"
+	@echo "  make test    - Run pytest"
 	@echo "  make check     - Run both mypy and pylint"
 	@echo "  make clean     - Remove __pycache__ and .pyc files"
