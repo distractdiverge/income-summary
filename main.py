@@ -122,7 +122,8 @@ def parse_transaction(text, statement_from_date = None, statement_to_date = None
         
         return Transaction(date=date_obj, amount=amount_value, description=description, category=category)
     else:
-        print(f"Could not match: '{text}'")
+        # print(f"Could not match: '{text}'")
+        pass
     
     return None
 
@@ -150,7 +151,20 @@ def parse_transactions(text) -> List[Transaction]:
     return transactions
 
 def aggregate_income_by_month(transactions):
-    return transactions
+    income_by_month = defaultdict(float)
+
+    for transaction in transactions:
+        month_key = transaction.date.strftime("%Y-%m")
+        if transaction.category == TxnCategory.DirectDepositCategory:
+            income_by_month[month_key] += transaction.amount
+    
+    return income_by_month
+
+def save_transactions(transactions, file_path="transactions.json"):
+    with open(file_path, "w") as json_file:
+        json.dump(transactions, json_file, default=str, indent=4)
+    
+    print("List of Transactions saved as " + file_path)
 
 def save_summary(income_summary, file_path="income_summary.json"):
     with open(file_path, "w") as json_file:
@@ -160,7 +174,7 @@ def save_summary(income_summary, file_path="income_summary.json"):
 
 
 def process_statement(file_path):
-    print("Processing Statement " + file_path)
+    print("\n\nProcessing Statement " + file_path)
     transactions = extract_transactions_from_pdf(file_path)
     return transactions
 
@@ -173,8 +187,12 @@ def process_statements(directory):
             transactions = process_statement(os.path.join(directory, file))
             all_transactions.extend(transactions)
     
+    
+    save_transactions(all_transactions)
     income_summary = aggregate_income_by_month(all_transactions)
     save_summary(income_summary)
+
+    # TODO: Summarize Avg Monthly
 
 
 if __name__ == "__main__":
