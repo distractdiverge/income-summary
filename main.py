@@ -48,14 +48,6 @@ def should_process_transaction(text) -> bool:
     return True # Yes, process by default
 
 def categorize_transaction(text_description) -> TxnCategory:
-    #"Direct Deposit - ACH Trnsfr Mspbna",
-    #    "Interest Payment",
-    #"Other Fin Inst ATM Surcharge Reimb",
-    #   "5661 Debit Card Purchase Pp*Apple.Com/Bill",
-    #    "POS Purchase Mirage Tobacco Horsham PA",
-    #    "5661 Recurring Debit Card Paypal *Hulu",
-    #    "ATM Withdrawal 435 York Rd. Warminister",
-    #    "5661 Debit Card Purchase Pp*Apple.Com/Bill",
     if text_description is None:
         return TxnCategory.OtherCategory
     
