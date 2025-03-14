@@ -1,3 +1,4 @@
+# Ignore sensitive output data or any input data
 output.txt
 transactions.json
 income_summary.json
