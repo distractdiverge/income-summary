@@ -6,25 +6,32 @@ from transaction import Transaction
 @pytest.mark.parametrize(
     ("input", "expected"),
     [
-        # TODO: Replace 'expected' values to match new parsing of data
         (
-            "01/17 30.00 XXXX Debit Card Purchase Paypal *Add To Bal", 
+            "02/15 45.00 1234 Debit Card Purchase Example *Coffee Shop", 
             Transaction(
-                date=datetime(datetime.now().year, 1, 17), 
-                amount=float(30.00), 
-                description="XXXX Debit Card Purchase Paypal *Add To Bal"
+                date=datetime(datetime.now().year, 2, 15), 
+                amount=float(45.00), 
+                description="1234 Debit Card Purchase Example *Coffee Shop"
             )
         ),
         (
-            "08/29 .99 XXXX Debit Card Purchase Pp*Apple.Com/Bill", 
+            "07/10 .99 5678 Debit Card Purchase Example *Online Store", 
             Transaction(
-                date=datetime(datetime.now().year, 8, 29), 
+                date=datetime(datetime.now().year, 7, 10), 
                 amount=float(.99), 
-                description="XXXX Debit Card Purchase Pp*Apple.Com/Bill"
+                description="5678 Debit Card Purchase Example *Online Store"
             )
         ),
-        ("test2", None),
-        ("01/12 6,815.43 01/20 8,016.72 01/27 9,668.98 02/03 7,498.76", None)
+        (
+            "01/10 .99 5678 Debit Card Purchase Example January", 
+            Transaction(
+                date=datetime(datetime.now().year, 1, 10), 
+                amount=float(.99), 
+                description="5678 Debit Card Purchase Example January"
+            )
+        ),
+        ("invalid_data", None),
+        ("03/22 1,234.56 03/29 2,345.67 04/05 3,456.78 04/12 4,567.89", None)
     ],
 )
 def test_parse_transaction(input, expected):
