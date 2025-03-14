@@ -17,6 +17,9 @@ pylint:
 test:
 	pytest
 
+testcov:
+	pytest --cov=. --cov-report html test*.py
+
 check: mypy pylint
 
 clean:

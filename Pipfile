@@ -8,6 +8,7 @@ pdfplumber = "*"
 pytest = "*"
 mypy = "*"
 pylint = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
