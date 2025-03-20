@@ -18,7 +18,7 @@ test:
 	uv run pytest
 
 testcov:
-	uv run pytest --cov=. --cov-report html test*.py
+	uv run pytest --cov=. --cov-report html tests/test*.py
 
 check: mypy pylint
 
