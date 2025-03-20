@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime
-from main import parse_transaction
+from income_summarizer import parse_transaction
 from transaction import Transaction
 
 @pytest.mark.parametrize(

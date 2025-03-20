@@ -1,7 +1,7 @@
 import pytest
 import datetime
 from transaction_category import CATEGORIES, TxnCategory
-from main import categorize_transaction
+from income_summarizer import categorize_transaction
 
 @pytest.mark.parametrize(
         ("txn_description", "category"),
