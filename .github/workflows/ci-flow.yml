@@ -1,0 +1,23 @@
+name: Income Summary CI Flow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup uv from pyproject.toml 
+      uses: astral-sh/setup-uv@v5
+      with: 
+        uv-file: "./pyproject.toml"
+
+    - name: Run Pytest
+      run: uv run pytest
