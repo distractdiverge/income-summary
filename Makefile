@@ -9,16 +9,16 @@ run:
 	$(PYTHON) main.py > output.txt
 
 mypy:
-	mypy $(SRC_DIR)
+	uv run mypy $(SRC_DIR)
 
 pylint:
-	pylint $(SRC_DIR)
+	uv run pylint $(SRC_DIR)
 
 test:
-	pytest
+	uv run pytest
 
 testcov:
-	pytest --cov=. --cov-report html test*.py
+	uv run pytest --cov=. --cov-report html test*.py
 
 check: mypy pylint
 
