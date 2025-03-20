@@ -19,5 +19,7 @@ jobs:
       with: 
         uv-file: "./pyproject.toml"
 
+    - name: Install Dev Dependencies
+      run: uv sync --group test
     - name: Run Pytest
       run: uv run pytest
