@@ -34,9 +34,8 @@ jobs:
       - id: test-cov
         name: Run Test Coverage and Gen HTML report
         run: make testcov
-      
       - name: Test Summary
         uses: test-summary/action@v2
         with:
-            paths: "coverage.xml"
+          paths: "coverage.xml"
         if: always()
