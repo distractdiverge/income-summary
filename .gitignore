@@ -3,6 +3,7 @@ output.txt
 transactions.json
 income_summary.json
 data
+test-results.xml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
