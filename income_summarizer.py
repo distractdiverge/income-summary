@@ -43,7 +43,7 @@ def should_process_transaction(text) -> bool:
     date_value_pattern = re.compile(r"(\d{2}/\d{2}\s+[\d,]+\.\d{2}\s+){2,}")
 
     if date_value_pattern.search(text):
-        return True
+        return False
     
     return True # Yes, process by default
 
