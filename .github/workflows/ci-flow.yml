@@ -8,19 +8,29 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup uv from pyproject.toml 
-      uses: astral-sh/setup-uv@v5
-      with: 
-        uv-file: "./pyproject.toml"
-
-    - name: Install Dev Dependencies
-      run: uv sync --group test
-
-    - name: Run Pytest
-      run: uv run pytest
+      - id: checkout
+        uses: actions/checkout@v4
+      
+      - id: setup
+        name: Setup uv from pyproject.toml 
+        uses: astral-sh/setup-uv@v5
+        with: 
+          uv-file: "./pyproject.toml"
+      
+      - id: install-dependencies
+        name: Install Dev Dependencies
+        run: uv sync --group test
+      
+      - id: lint
+        name: Lint the project using pylint
+        run: make lint
+      
+      - id: unit-tests
+        name: Run Pytest
+        run: make test
+      
+      - id: test-cov
+        name: Run Test Coverage and Gen HTML report
+        run: make testcov
