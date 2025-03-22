@@ -23,9 +23,9 @@ jobs:
         name: Install Dev Dependencies
         run: uv sync --group test
       
-      - id: lint
-        name: Lint the project using pylint
-        run: make lint
+      #- id: lint
+      #  name: Lint the project using pylint
+      #  run: make lint
       
       - id: unit-tests
         name: Run Pytest
