@@ -34,4 +34,11 @@ jobs:
       - id: test-cov
         name: Run Test Coverage and Gen XML report
         run: make testcov
+      
+      - name: Surface failing tests
+        if: always()
+        uses: pmeir/pytest-results-action@main
+        with:
+          path: test-results.xml
+          title: Test Results
 

@@ -15,7 +15,7 @@ lint:
 	 $(SRC_DIR) $(TEST_DIR) 
 
 test:
-	uv run pytest $(TEST_FILES)
+	uv run pytest --junit-xml=test-results.xml $(TEST_FILES)
 
 testcov:
 	uv run pytest --cov=$(SRC_DIR) --cov-report xml $(TEST_FILES)
