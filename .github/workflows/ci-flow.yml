@@ -38,4 +38,5 @@ jobs:
       - name: Test Summary
         uses: test-summary/action@v2
         with:
-            paths: "htmlcov/index.html"
+            paths: "coverage.xml"
+        if: always()

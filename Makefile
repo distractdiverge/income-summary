@@ -18,6 +18,9 @@ test:
 	uv run pytest $(TEST_FILES)
 
 testcov:
+	uv run pytest --cov=$(SRC_DIR) --cov-report xml $(TEST_FILES)
+
+htmltestcov:
 	uv run pytest --cov=$(SRC_DIR) --cov-report html $(TEST_FILES)
 
 check: mypy pylint
